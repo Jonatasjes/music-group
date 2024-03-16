@@ -15,7 +15,6 @@
     "plugins": [
         "@typescript-eslint"
     ],
-    "files": ["src/**/*.js"],
     "rules": {
         "indent": [
             "error",
@@ -32,6 +31,7 @@
         "semi": [
             "error",
             "never"
-        ]
+        ],
+				"comma-dangle":"error"
     }
 }
