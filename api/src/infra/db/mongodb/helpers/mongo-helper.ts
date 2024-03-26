@@ -14,6 +14,7 @@ export const MongoHelper = {
 	},
 
 	map(result: InsertOneResult<Document>, data: any): any {
-		return Object.assign({}, data, { id: result.insertedId.toString() })
+		const { _id, ...dataWithoutId } = data
+		return Object.assign({}, dataWithoutId, { id: result.insertedId.toString() })
 	}
 }
