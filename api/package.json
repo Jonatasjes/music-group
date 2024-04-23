@@ -1,7 +1,7 @@
 {
   "name": "api",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.1.0",
+  "description": "Music Group App Api ",
   "main": "index.js",
   "scripts": {
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
