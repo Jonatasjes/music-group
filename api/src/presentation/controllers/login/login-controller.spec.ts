@@ -1,7 +1,7 @@
 import { MissingParamError } from "../../errors"
 import { badRequest, ok, serverError, unauthorized } from "../../helpers/http/http-helper"
-import { LoginController } from "./login"
-import { Authentication, AuthenticationModel, HttpRequest, Validation } from "./login-protocols"
+import { LoginController } from "./login-controller"
+import { Authentication, AuthenticationModel, HttpRequest, Validation } from "./login-controller-protocols"
 
 const makeAuthentication = (): Authentication => {
 	class AuthenticationStub implements Authentication {
@@ -65,7 +65,9 @@ describe("Login Controller", () => {
 
 	test("Should returns 500 if Authentication throws", async () => {
 		const { sut, authenticationStub } = makeSut()
-		jest.spyOn(authenticationStub, "auth").mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+		jest
+			.spyOn(authenticationStub, "auth")
+			.mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
 		const httpRequest = makeFakeRequest()
 		const HttpResponse = await sut.handle(httpRequest)
 		expect(HttpResponse).toEqual(serverError(new Error()))
