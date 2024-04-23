@@ -4,9 +4,10 @@ import { Controller, HttpRequest, HttpResponse } from "../../protocols"
 import { Validation } from "./login-controller-protocols"
 
 export class LoginController implements Controller {
-	private readonly validation: Validation
-	private readonly authentication: Authentication
-	constructor(validation: Validation, authentication: Authentication) {
+	constructor(
+		private readonly validation: Validation,
+		private readonly authentication: Authentication
+	) {
 		this.validation = validation
 		this.authentication = authentication
 	}
