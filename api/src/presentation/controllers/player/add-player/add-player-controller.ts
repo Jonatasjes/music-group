@@ -1,3 +1,4 @@
+import { badRequest } from "../../../helpers/http/http-helper"
 import { Controller, HttpRequest, HttpResponse, Validation } from "./add-player-controller-protocols"
 
 export class AddPlayerController implements Controller {
@@ -5,7 +6,12 @@ export class AddPlayerController implements Controller {
 		this.validation = validation
 	}
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		this.validation.validate(httpRequest.body)
+		const error = this.validation.validate(httpRequest.body)
+
+		if (error) {
+			return badRequest(error)
+		}
+
 		return new Promise((resolve) => resolve(null))
 	}
 }
