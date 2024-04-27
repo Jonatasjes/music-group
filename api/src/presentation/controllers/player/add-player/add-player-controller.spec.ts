@@ -1,5 +1,4 @@
-import { throws } from "assert"
-import { badRequest, serverError } from "../../../helpers/http/http-helper"
+import { badRequest, noContent, serverError } from "../../../helpers/http/http-helper"
 import { AddPlayerController } from "./add-player-controller"
 import { AddPlayer, AddPlayerModel, HttpRequest, Validation } from "./add-player-controller-protocols"
 
@@ -74,8 +73,13 @@ describe("AddPlayer Controller", () => {
 		jest.spyOn(addPlayerStub, "add").mockImplementationOnce(() => {
 			throw new Error()
 		})
-		makeFakeHttpRequest()
 		const HttpResponse = await sut.handle(makeFakeHttpRequest())
 		expect(HttpResponse).toEqual(serverError(new Error()))
+	})
+
+	test("Should return 204 on success", async () => {
+		const { sut } = makeSut()
+		const HttpResponse = await sut.handle(makeFakeHttpRequest())
+		expect(HttpResponse).toEqual(noContent())
 	})
 })
