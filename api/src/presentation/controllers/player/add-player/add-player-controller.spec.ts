@@ -1,3 +1,4 @@
+import { badRequest } from "../../../helpers/http/http-helper"
 import { AddPlayerController } from "./add-player-controller"
 import { HttpRequest, Validation } from "./add-player-controller-protocols"
 
@@ -38,5 +39,12 @@ describe("AddPlayer Controller", () => {
 		const httpRequest = makeFakeHttpRequest()
 		await sut.handle(httpRequest)
 		expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+	})
+
+	test("Should return 400 if Validation fails", async () => {
+		const { sut, validationStub } = makeSut()
+		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error())
+		const HttpResponse = await sut.handle(makeFakeHttpRequest())
+		expect(HttpResponse).toEqual(badRequest(new Error()))
 	})
 })
