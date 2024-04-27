@@ -1,5 +1,4 @@
-import { throws } from "assert"
-import { badRequest, serverError } from "../../../helpers/http/http-helper"
+import { badRequest, noContent, serverError } from "../../../helpers/http/http-helper"
 import {
 	AddPlayer,
 	Controller,
@@ -29,7 +28,7 @@ export class AddPlayerController implements Controller {
 				instrument
 			})
 
-			return null
+			return noContent()
 		} catch (error) {
 			return serverError(error)
 		}
