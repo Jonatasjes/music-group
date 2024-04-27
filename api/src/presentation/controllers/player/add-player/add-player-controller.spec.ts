@@ -1,6 +1,6 @@
 import { badRequest } from "../../../helpers/http/http-helper"
 import { AddPlayerController } from "./add-player-controller"
-import { HttpRequest, Validation } from "./add-player-controller-protocols"
+import { AddPlayer, AddPlayerModel, HttpRequest, Validation } from "./add-player-controller-protocols"
 
 const makeFakeHttpRequest = (): HttpRequest => ({
 	body: {
@@ -18,17 +18,29 @@ const makeValidation = (): Validation => {
 	return new ValidationStub()
 }
 
+const makeAddPlayer = (): AddPlayer => {
+	class AddPlayerStub implements AddPlayer {
+		async add(data: AddPlayerModel): Promise<void> {
+			return new Promise((resolve) => resolve())
+		}
+	}
+	return new AddPlayerStub()
+}
+
 interface SutTypes {
 	sut: AddPlayerController
 	validationStub: Validation
+	addPlayerStub: AddPlayer
 }
 
 const makeSut = (): SutTypes => {
 	const validationStub = makeValidation()
-	const sut = new AddPlayerController(validationStub)
+	const addPlayerStub = makeAddPlayer()
+	const sut = new AddPlayerController(validationStub, addPlayerStub)
 	return {
 		sut,
-		validationStub
+		validationStub,
+		addPlayerStub
 	}
 }
 
@@ -46,5 +58,13 @@ describe("AddPlayer Controller", () => {
 		jest.spyOn(validationStub, "validate").mockReturnValueOnce(new Error())
 		const HttpResponse = await sut.handle(makeFakeHttpRequest())
 		expect(HttpResponse).toEqual(badRequest(new Error()))
+	})
+
+	test("Should call AddPlayer with correct values", async () => {
+		const { sut, addPlayerStub } = makeSut()
+		const addSpy = jest.spyOn(addPlayerStub, "add")
+		const httpRequest = makeFakeHttpRequest()
+		await sut.handle(httpRequest)
+		expect(addSpy).toHaveBeenCalledWith(httpRequest.body)
 	})
 })
