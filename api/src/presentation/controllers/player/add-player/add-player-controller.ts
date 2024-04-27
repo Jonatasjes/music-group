@@ -1,4 +1,5 @@
-import { badRequest } from "../../../helpers/http/http-helper"
+import { throws } from "assert"
+import { badRequest, serverError } from "../../../helpers/http/http-helper"
 import {
 	AddPlayer,
 	Controller,
@@ -16,17 +17,21 @@ export class AddPlayerController implements Controller {
 		this.AddPlayer = AddPlayer
 	}
 	async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
-		const error = this.validation.validate(httpRequest.body)
-		if (error) {
-			return badRequest(error)
+		try {
+			const error = this.validation.validate(httpRequest.body)
+			if (error) {
+				return badRequest(error)
+			}
+
+			const { name, instrument } = httpRequest.body
+			await this.AddPlayer.add({
+				name,
+				instrument
+			})
+
+			return null
+		} catch (error) {
+			return serverError(error)
 		}
-
-		const { name, instrument } = httpRequest.body
-		await this.AddPlayer.add({
-			name,
-			instrument
-		})
-
-		return null
 	}
 }
