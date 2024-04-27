@@ -1,3 +1,4 @@
+import { serverError } from "../../../presentation/helpers/http/http-helper"
 import { DbAddPlayer } from "./db-add-player"
 import { AddPlayerModel, AddPlayerRepository } from "./db-add-player-protocols"
 
@@ -37,5 +38,14 @@ describe("DbAddPlayer Usecase", () => {
 		const playerData = makeAddPlayerModel()
 		await sut.add(playerData)
 		expect(addSpy).toHaveBeenCalledWith(playerData)
+	})
+
+	test("Should throw if AddPlayerRepository throws", async () => {
+		const { sut, addPlayerRepositoryStub } = makeSut()
+		jest
+			.spyOn(addPlayerRepositoryStub, "add")
+			.mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+		const promise = sut.add(makeAddPlayerModel())
+		expect(promise).rejects.toThrow()
 	})
 })
