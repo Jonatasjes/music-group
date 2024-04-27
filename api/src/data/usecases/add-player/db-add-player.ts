@@ -6,6 +6,5 @@ export class DbAddPlayer implements AddPlayer {
 	}
 	async add(data: AddPlayerModel): Promise<void> {
 		await this.addPlayerRepository.add(data)
-		return null
 	}
 }
