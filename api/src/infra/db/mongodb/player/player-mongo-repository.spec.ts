@@ -1,6 +1,6 @@
 import { Collection } from "mongodb"
 import { MongoHelper } from "../helpers/mongo-helper"
-import { PlayerMongoRepository } from "./player-mongo-repository"
+import { AddPlayerMongoRepository } from "./player-mongo-repository"
 import { AddPlayerModel } from "../../../../domain/usecases/add-player"
 
 const makeAddPlayerModel = (): AddPlayerModel => ({
@@ -24,8 +24,8 @@ describe("Player Mongo Repository", () => {
 		await playerCollection.deleteMany({})
 	})
 
-	const makeSut = (): PlayerMongoRepository => {
-		return new PlayerMongoRepository()
+	const makeSut = (): AddPlayerMongoRepository => {
+		return new AddPlayerMongoRepository()
 	}
 
 	test("Should add a player on success", async () => {

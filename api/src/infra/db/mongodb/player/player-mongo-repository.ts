@@ -2,7 +2,7 @@ import { AddPlayerRepository } from "../../../../data/protocols/db/player/add-pl
 import { AddPlayerModel } from "../../../../domain/usecases/add-player"
 import { MongoHelper } from "../helpers/mongo-helper"
 
-export class PlayerMongoRepository implements AddPlayerRepository {
+export class AddPlayerMongoRepository implements AddPlayerRepository {
 	async add(playerData: AddPlayerModel): Promise<void> {
 		const playerCollection = await MongoHelper.getCollection("players")
 		await playerCollection.insertOne(playerData)
