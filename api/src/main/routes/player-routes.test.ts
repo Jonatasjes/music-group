@@ -20,14 +20,14 @@ describe("Player Routes", () => {
 	})
 
 	describe("POST /players", () => {
-		test("Should return 204 on add player success", async () => {
+		test("Should return 403 on add player without accessToken", async () => {
 			await request(app)
 				.post("/api/players")
 				.send({
 					name: "Jonatas",
 					instrument: ["contrabaixo", "teclado", "bateria"]
 				})
-				.expect(204)
+				.expect(403)
 		})
 	})
 })
